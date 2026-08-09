@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <title>Aditya Kharmale</title>
 <meta name="description" content="Aditya Kharmale, researcher at Mitsubishi Electric Advanced Technology R&D Centre, Osaka. Interests in neural networks, 3D reconstruction, image processing, and optimization.">
+<style>
+.tabs a { padding: 4px 8px; }
+.tabs a.active { background: #000000; color: #FFFFFF; text-decoration: none; }
+.tabpanel { display: none; }
+.tabpanel.active { display: block; }
+</style>
 </head>
 <body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink="#FF0000">
 
@@ -15,19 +21,20 @@ Osaka, Japan</p>
 
 <hr>
 
-<p align="center">
-<a href="#about">About</a> |
-<a href="#interests">Research Interests</a> |
-<a href="#experience">Experience</a> |
-<a href="#education">Education</a> |
-<a href="#competitive">Competitive Programming</a> |
-<a href="#vlog">Vlog</a> |
-<a href="#contact">Contact</a>
+<p align="center" class="tabs">
+<a href="#about" onclick="showTab('about');return false;">About</a> |
+<a href="#interests" onclick="showTab('interests');return false;">Research Interests</a> |
+<a href="#experience" onclick="showTab('experience');return false;">Experience</a> |
+<a href="#education" onclick="showTab('education');return false;">Education</a> |
+<a href="#competitive" onclick="showTab('competitive');return false;">Competitive Programming</a> |
+<a href="#vlog" onclick="showTab('vlog');return false;">Vlog</a> |
+<a href="#contact" onclick="showTab('contact');return false;">Contact</a>
 </p>
 
 <hr>
 
-<h2 id="about">About</h2>
+<div id="about" class="tabpanel">
+<h2>About</h2>
 <p>
 <img src="profile.jpeg" align="left" width="150" hspace="10" vspace="0" alt="Aditya Kharmale">
 I work at the Mitsubishi Electric Advanced Technology R&amp;D Centre in Osaka,
@@ -39,29 +46,29 @@ algorithms, and student leadership work.
 Online I go by <b>GOAT7</b> on Codeforces and LeetCode.
 </p>
 <br clear="all">
+</div>
 
-<hr>
-
-<h2 id="interests">Research Interests</h2>
+<div id="interests" class="tabpanel">
+<h2>Research Interests</h2>
 <ul>
 <li>Neural Networks</li>
 <li>3D Reconstruction</li>
 <li>Image Processing</li>
 <li>Optimization</li>
 </ul>
+</div>
 
-<hr>
-
-<h2 id="experience">Experience</h2>
+<div id="experience" class="tabpanel">
+<h2>Experience</h2>
 <h3>Researcher, Mitsubishi Electric: Sept 2025 to present</h3>
 <p>
 Advanced Technology R&amp;D Centre, Osaka, Japan<br>
 Working on advanced R&amp;D problems spanning vision, learning, and optimization.
 </p>
+</div>
 
-<hr>
-
-<h2 id="education">Education</h2>
+<div id="education" class="tabpanel">
+<h2>Education</h2>
 <h3>Indian Institute of Technology, Hyderabad</h3>
 <p>Alumnus. Roles I held during my time on campus:</p>
 <ul>
@@ -69,19 +76,19 @@ Working on advanced R&amp;D problems spanning vision, learning, and optimization
 <li><b>Internship Coordinator, Office of Career Services.</b> Helped connect students with hiring firms and ran the recruitment pipeline for internships.</li>
 <li><b>Core Member, Elektronika.</b> Contributed to the institute's electronics and robotics community.</li>
 </ul>
+</div>
 
-<hr>
-
-<h2 id="competitive">Competitive Programming</h2>
+<div id="competitive" class="tabpanel">
+<h2>Competitive Programming</h2>
 <p>I have been an active competitive programmer for several years.</p>
 <ul>
 <li><a href="https://codeforces.com/profile/GOAT7" target="_blank">Codeforces</a>: Specialist, handle <tt>GOAT7</tt>.</li>
 <li><a href="https://leetcode.com/u/GOAT7/" target="_blank">LeetCode</a>: handle <tt>GOAT7</tt>.</li>
 </ul>
+</div>
 
-<hr>
-
-<h2 id="vlog">Vlog</h2>
+<div id="vlog" class="tabpanel">
+<h2>Vlog</h2>
 <p>Notes on research, competitive programming, and life in Osaka.</p>
 
 <h3>On dynamic activation functions <i>(work in progress)</i></h3>
@@ -94,16 +101,17 @@ per layer or per input? Early experiments are interesting.
 I will write more once results are worth showing.
 </p>
 <br clear="all">
+</div>
 
-<hr>
-
-<h2 id="contact">Contact</h2>
+<div id="contact" class="tabpanel">
+<h2>Contact</h2>
 <table border="1" cellpadding="6" cellspacing="0">
 <tr><td><b>Email</b></td><td><a href="mailto:adityakharmale7@gmail.com">adityakharmale7@gmail.com</a></td></tr>
 <tr><td><b>GitHub</b></td><td><a href="https://github.com/AdityaKharmaleGoat7" target="_blank">AdityaKharmaleGoat7</a></td></tr>
 <tr><td><b>Codeforces</b></td><td><a href="https://codeforces.com/profile/GOAT7" target="_blank">GOAT7</a></td></tr>
 <tr><td><b>LeetCode</b></td><td><a href="https://leetcode.com/u/GOAT7/" target="_blank">GOAT7</a></td></tr>
 </table>
+</div>
 
 <hr>
 
@@ -113,6 +121,31 @@ I will write more once results are worth showing.
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
+
+var tabIds = ['about', 'interests', 'experience', 'education', 'competitive', 'vlog', 'contact'];
+
+function showTab(id) {
+  for (var i = 0; i < tabIds.length; i++) {
+    var panel = document.getElementById(tabIds[i]);
+    var link = document.querySelector('.tabs a[href="#' + tabIds[i] + '"]');
+    if (tabIds[i] === id) {
+      panel.className = 'tabpanel active';
+      if (link) link.className = 'active';
+    } else {
+      panel.className = 'tabpanel';
+      if (link) link.className = '';
+    }
+  }
+  if (history.replaceState) {
+    history.replaceState(null, '', '#' + id);
+  }
+}
+
+var initial = window.location.hash.replace('#', '');
+if (tabIds.indexOf(initial) === -1) {
+  initial = 'about';
+}
+showTab(initial);
 </script>
 
 </body>
