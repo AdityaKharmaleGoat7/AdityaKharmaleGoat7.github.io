@@ -17,6 +17,12 @@
       "date": "2026-08-05",
       "title": "Upcoming open source project",
       "html": "<p>I am planning to work on the creation of a distributed cloud system. I have some TB of space, and I am planning to host music on it using <a href=\"https://github.com/navidrome/navidrome\">Navidrome</a>.</p><p>Host photos &amp; videos using: <a href=\"https://github.com/immich-app/immich\" target=\"_blank\" rel=\"noopener noreferrer\">Immich</a></p><p>Create some space inside the server for parents so that they can keep the photos &amp; videos</p>"
+    },
+    {
+      "id": "2026-08-10-some-useful-resources",
+      "date": "2026-08-10",
+      "title": "Some useful resources",
+      "html": "<p> I studied system designs from: <a href = \"https://github.com/donnemartin/system-design-primer#communication\">System design primer<a> </p>"
     }
   ]
 }
