@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blog Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+body { font-family: monospace; max-width: 720px; margin: 40px auto; padding: 0 16px; background: #FFFFFF; color: #000000; }
+h1 { font-size: 20px; }
+label { display: block; margin-top: 16px; font-weight: bold; }
+input[type="text"], input[type="password"], input[type="date"], textarea {
+  width: 100%; box-sizing: border-box; font-family: monospace; font-size: 14px;
+  padding: 6px; margin-top: 4px; border: 1px solid #000000;
+}
+textarea { height: 220px; resize: vertical; }
+button { margin-top: 16px; padding: 8px 16px; font-family: monospace; cursor: pointer; }
+#status { margin-top: 12px; white-space: pre-wrap; }
+.error { color: #B00020; }
+.ok { color: #007000; }
+hr { margin: 32px 0; }
+.post-row { border: 1px solid #000000; padding: 10px; margin-bottom: 10px; }
+.post-row h3 { margin: 0 0 4px 0; }
+.post-row small { color: #444444; }
+.post-row button { margin-top: 8px; font-size: 12px; padding: 4px 10px; }
+.hint { color: #444444; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Blog Admin</h1>
+<p class="hint">Publishes directly to <code>posts.json</code> in this repo via the GitHub API. This page is not linked from the site nav; keep the URL to yourself. Your token is stored only in this browser's localStorage, never committed anywhere.</p>
+
+<label for="token">GitHub personal access token</label>
+<input type="password" id="token" placeholder="github_pat_... (fine-grained, Contents: Read & Write, scoped to this repo only)">
+<p class="hint">Create one at github.com &rarr; Settings &rarr; Developer settings &rarr; Fine-grained tokens. Grant it access to only this repository, with "Contents" permission set to Read and write.</p>
+
+<hr>
+
+<h2>New post</h2>
+<label for="title">Title</label>
+<input type="text" id="title" placeholder="Post title">
+
+<label for="date">Date</label>
+<input type="date" id="date">
+
+<label for="body">Body (HTML)</label>
+<textarea id="body" placeholder="&lt;p&gt;Write your post. Plain text works, or use HTML tags like &lt;b&gt;, &lt;i&gt;, &lt;a href=&quot;...&quot;&gt;, &lt;ul&gt;&lt;li&gt;, &lt;img src=&quot;assets/...&quot;&gt; just like the rest of the site.&lt;/p&gt;"></textarea>
+
+<button id="publishBtn">Publish</button>
+<div id="status"></div>
+
+<hr>
+
+<h2>Existing posts</h2>
+<div id="list">Loading...</div>
+
+<script>
+var OWNER = 'AdityaKharmaleGoat7';
+var REPO = 'AdityaKharmaleGoat7.github.io';
+var BRANCH = 'main';
+var FILE_PATH = 'posts.json';
+var API = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FILE_PATH;
+
+var tokenEl = document.getElementById('token');
+var statusEl = document.getElementById('status');
+var listEl = document.getElementById('list');
+
+tokenEl.value = localStorage.getItem('blog_admin_token') || '';
+tokenEl.addEventListener('change', function () {
+  localStorage.setItem('blog_admin_token', tokenEl.value.trim());
+});
+
+document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+
+function utf8ToB64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64ToUtf8(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function setStatus(msg, isError) {
+  statusEl.textContent = msg;
+  statusEl.className = isError ? 'error' : 'ok';
+}
+function authHeaders() {
+  var t = tokenEl.value.trim();
+  if (!t) throw new Error('Enter a GitHub token first.');
+  return { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github+json' };
+}
+
+function loadFile() {
+  return fetch(API + '?ref=' + BRANCH, { headers: authHeaders() })
+    .then(function (r) {
+      if (!r.ok) return r.json().then(function (e) { throw new Error(r.status + ': ' + (e.message || 'failed to load posts.json')); });
+      return r.json();
+    })
+    .then(function (data) {
+      var parsed = JSON.parse(b64ToUtf8(data.content.replace(/\n/g, '')));
+      return { sha: data.sha, posts: parsed.posts || [] };
+    });
+}
+
+function saveFile(posts, sha, message) {
+  var body = {
+    message: message,
+    content: utf8ToB64(JSON.stringify({ posts: posts }, null, 2)),
+    sha: sha,
+    branch: BRANCH
+  };
+  return fetch(API, {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
+    body: JSON.stringify(body)
+  }).then(function (r) {
+    if (!r.ok) return r.json().then(function (e) { throw new Error(r.status + ': ' + (e.message || 'failed to save posts.json')); });
+    return r.json();
+  });
+}
+
+function renderList(posts, sha) {
+  if (!posts.length) {
+    listEl.innerHTML = '<p>No posts yet.</p>';
+    return;
+  }
+  var sorted = posts.slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
+  listEl.innerHTML = '';
+  sorted.forEach(function (p) {
+    var row = document.createElement('div');
+    row.className = 'post-row';
+    row.innerHTML = '<h3>' + escapeHtml(p.title) + '</h3><small>' + escapeHtml(p.date) + '</small>';
+    var del = document.createElement('button');
+    del.textContent = 'Delete';
+    del.addEventListener('click', function () {
+      if (!confirm('Delete "' + p.title + '"?')) return;
+      deletePost(p.id);
+    });
+    row.appendChild(del);
+    listEl.appendChild(row);
+  });
+}
+
+function refreshList() {
+  listEl.textContent = 'Loading...';
+  loadFile()
+    .then(function (data) { renderList(data.posts, data.sha); })
+    .catch(function (e) { listEl.innerHTML = '<p class="error">' + escapeHtml(e.message) + '</p>'; });
+}
+
+function publishPost() {
+  var title = document.getElementById('title').value.trim();
+  var date = document.getElementById('date').value;
+  var html = document.getElementById('body').value.trim();
+  if (!title || !date || !html) {
+    setStatus('Fill in title, date, and body first.', true);
+    return;
+  }
+  setStatus('Publishing...');
+  loadFile()
+    .then(function (data) {
+      var id = date + '-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      data.posts.push({ id: id, date: date, title: title, html: html });
+      return saveFile(data.posts, data.sha, 'Add post: ' + title);
+    })
+    .then(function () {
+      setStatus('Published. It may take a minute to appear on the live site.');
+      document.getElementById('title').value = '';
+      document.getElementById('body').value = '';
+      refreshList();
+    })
+    .catch(function (e) { setStatus(e.message, true); });
+}
+
+function deletePost(id) {
+  setStatus('Deleting...');
+  loadFile()
+    .then(function (data) {
+      var remaining = data.posts.filter(function (p) { return p.id !== id; });
+      return saveFile(remaining, data.sha, 'Delete post: ' + id);
+    })
+    .then(function () {
+      setStatus('Deleted.');
+      refreshList();
+    })
+    .catch(function (e) { setStatus(e.message, true); });
+}
+
+document.getElementById('publishBtn').addEventListener('click', publishPost);
+refreshList();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "id": "2026-06-01-dynamic-activation-functions",
+      "date": "2026-06-01",
+      "title": "On dynamic activation functions (work in progress)",
+      "html": "<p><img src=\"assets/v1.jpeg\" align=\"left\" width=\"200\" hspace=\"10\" vspace=\"0\" alt=\"Handwritten notes sketching the dynamic activation function idea\">A small idea I have been chewing on. Most networks lock in one nonlinearity and call it done. What if the activation itself were not a fixed shape, but something the network shaped on its own, per layer or per input? Early experiments are interesting. I will write more once results are worth showing.</p><p>9aug--&gt; I am not finding a good time/motivation/any thing..... which makes my mind to resume my work on it</p><p>My <a href=\"https://github.com/aki628\">colleague (Mr. Sasada) </a>is working with me on this project which we have kept private for obvious reasons.</p><br clear=\"all\">"
+    },
+    {
+      "id": "2026-07-20-views-on-open-source",
+      "date": "2026-07-20",
+      "title": "My views on open source project",
+      "html": "<ul><li>at first it's sometime quite challenging to appeal to the interest of the people and to build something that is worth useful</li><li>LinkedIn is ----, I don't understand why there is so much AI stuff on LinkedIn, the thing it does is that it makes every project appear as same AI shit</li><li>In some of my previous projects I used AI for writing the post description but I don't anymore.</li><li>To build real is worth it i guess and the reason why i mentioned about LinkedIn is that i uploaded some of my work there but it was of no use:<ol><li>Maybe the people weren't interested.</li><li>Maybe the project wasn't presented properly.</li><li>Maybe LinkedIn isn't the right platform for this kind of project.</li></ol></li></ul><p>I made the <a href=\"https://github.com/AdityaKharmaleGoat7/stockit\" target=\"_blank\">stockit</a> which is a kind of a bot that places the stocks on behalf of you, gives you the score for the stocks and also info about that company. I open sourced it but it didn't get much attention, maybe because of the reason mentioned above.</p><p>I need to work on improving the documentation for the future projects which obviously I'm gonna open source it :)</p><p>..............I will keep updating more...........</p>"
+    },
+    {
+      "id": "2026-08-05-upcoming-open-source-project",
+      "date": "2026-08-05",
+      "title": "Upcoming open source project",
+      "html": "<p>I am planning to work on the creation of a distributed cloud system. I have some TB of space, and I am planning to host music on it using <a href=\"https://github.com/navidrome/navidrome\">Navidrome</a>.</p><p>Host photos &amp; videos using: <a href=\"https://github.com/immich-app/immich\" target=\"_blank\" rel=\"noopener noreferrer\">Immich</a></p><p>Create some space inside the server for parents so that they can keep the photos &amp; videos</p>"
+    }
+  ]
+}

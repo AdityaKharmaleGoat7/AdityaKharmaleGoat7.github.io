@@ -27,7 +27,7 @@ Osaka, Japan</p>
 <a href="#experience" onclick="showTab('experience');return false;">Experience</a> |
 <a href="#education" onclick="showTab('education');return false;">Education</a> |
 <a href="#competitive" onclick="showTab('competitive');return false;">Competitive Programming</a> |
-<a href="#vlog" onclick="showTab('vlog');return false;">Vlogs</a> |
+<a href="#blog" onclick="showTab('blog');return false;">Blog</a> |
 <a href="#contact" onclick="showTab('contact');return false;">Contact</a>
 </p>
 
@@ -87,63 +87,10 @@ Working on advanced R&amp;D problems spanning vision, learning, and optimization
 </ul>
 </div>
 
-<div id="vlog" class="tabpanel">
-<h2>Vlog</h2>
+<div id="blog" class="tabpanel">
+<h2>Blog</h2>
 <p>Notes on research, competitive programming, and life in Osaka.</p>
-
-<h3>1) On dynamic activation functions <i>(work in progress)</i></h3>
-<p>
-<img src="assets/v1.jpeg" align="left" width="200" hspace="10" vspace="0" alt="Handwritten notes sketching the dynamic activation function idea">
-A small idea I have been chewing on. Most networks lock in one
-nonlinearity and call it done. What if the activation itself were
-not a fixed shape, but something the network shaped on its own,
-per layer or per input? Early experiments are interesting.
-I will write more once results are worth showing. 
-<p>
-9aug--> I am not finding a good time/motivation/any thing..... which makes my mind to resume my work on it
-</p>
-
-<p>My <a href="https://github.com/aki628">colleague (Mr. Sasada) </a>is working with me on this project which we have kept private for obvious reasons.</p>
-</p>
-
-<br clear="all">
-
-<h3>2) My views on open source project:</i></h3>
-<ul>
-  <li>at first it's sometime quite challenging to appeal to the interest of the people and to build something that is worth useful</li>
-  <li>LinkedIn is ----, I don't understand why there is so much AI stuff on LinkedIn, the thing it does is that it makes every project appear as same AI shit</li>
-  <li>In some of my previous projects I used AI for writing the post description but I don't anymore.</li>
-  <li>To build real is worth it i guess and the reason why i mentioned about LinkedIn is that i uploaded some of my work there but it was of no use:</li>
-    <ol>
-      <li>Maybe the people weren't interested.</li>
-      <li>Maybe the project wasn't presented properly.</li>
-      <li>Maybe LinkedIn isn't the right platform for this kind of project.</li>
-    </ol>
-   
-</ul>
-
-    <p>I made the <a href="https://github.com/AdityaKharmaleGoat7/stockit" target="_blank">stockit</a> which is a 
-        kind of a bot that places the stocks on behalf of you, gives you the score for the stocks and also info about that company.
-        I open sourced it but it didn't get much attention, maybe because of the reason mentioned above.
-     </p>
-
-     <p>I need to work on improving the documentation for the future projects which obviously I'm gonna open source it :)</p>
-    <p>..............I will keep updating more...........</p>
-
-
-<h3>3) Upcoming Open souce project</i></h3>
-<p>
-  I am planning to work on the creation of a distributed cloud system. I have
-  some TB of space, and I am planning to host music on it using
-  <a href="https://github.com/navidrome/navidrome">Navidrome</a>.
-</p>
-<p>
-  Host photos & videos using:
-  <a href="https://github.com/immich-app/immich" target="_blank" rel="noopener noreferrer">
-    Immich
-  </a>
-</p>
-Create some space inside the server for parents so that they can keep the photos & videos
+<div id="blog-posts">Loading posts&hellip;</div>
 </div>
 
 <div id="contact" class="tabpanel">
@@ -159,13 +106,13 @@ Create some space inside the server for parents so that they can keep the photos
 <hr>
 
 <p align="center">
-<small>&copy; <span id="year"></span> Aditya Kharmale. Stay hungry stay foolish.</small>
+<small>&copy; <span id="year"></span> Aditya Kharmale. Stay hungry stay foolish. &middot; <a href="admin.html">admin</a></small>
 </p>
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-var tabIds = ['about', 'interests', 'experience', 'education', 'competitive', 'vlog', 'contact'];
+var tabIds = ['about', 'interests', 'experience', 'education', 'competitive', 'blog', 'contact'];
 
 function showTab(id) {
   for (var i = 0; i < tabIds.length; i++) {
@@ -189,6 +136,41 @@ if (tabIds.indexOf(initial) === -1) {
   initial = 'about';
 }
 showTab(initial);
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function formatDate(iso) {
+  var dt = new Date(iso + 'T00:00:00');
+  return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function renderPosts(posts) {
+  var container = document.getElementById('blog-posts');
+  if (!posts.length) {
+    container.innerHTML = '<p>No posts yet.</p>';
+    return;
+  }
+  posts.sort(function (a, b) { return b.date.localeCompare(a.date); });
+  var html = '';
+  posts.forEach(function (p, i) {
+    html += '<h3>' + escapeHtml(p.title) + '</h3>';
+    html += '<p><small>' + formatDate(p.date) + '</small></p>';
+    html += p.html;
+    if (i < posts.length - 1) html += '<hr>';
+  });
+  container.innerHTML = html;
+}
+
+fetch('posts.json?_=' + Date.now())
+  .then(function (r) { return r.json(); })
+  .then(function (data) { renderPosts(data.posts || []); })
+  .catch(function () {
+    document.getElementById('blog-posts').innerHTML = '<p>Could not load posts.</p>';
+  });
 </script>
 
 </body>
