@@ -23,6 +23,12 @@
       "date": "2026-08-10",
       "title": "Some useful resources",
       "html": "<p> I studied system designs from: <a href = \"https://github.com/donnemartin/system-design-primer#communication\">System design primer<a> </p>\n\n<p> <a href = \"https://github.com/codecrafters-io/build-your-own-x\">build-your-own-x</a> The thing I like about this repo is that there is no code, only links to the resources that are genuinely helpful like I remember I build my own 3d renderer using the resources in this repo </p>\n\n<p> I will update more soon </p>"
+    },
+    {
+      "id": "2026-08-11-test",
+      "date": "2026-08-11",
+      "title": "test",
+      "html": "<p> this is a test baby</p>"
     }
   ]
 }
