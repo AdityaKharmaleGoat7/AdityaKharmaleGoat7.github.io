@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>~*~ Aditya Kharmale's Home Page ~*~</title>
 <meta name="description" content="Aditya Kharmale, researcher at Mitsubishi Electric ATC (Advanced Technology Center) R&D, Osaka. Interests in neural networks, 3D reconstruction, image processing, and optimization.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%92%BE%3C/text%3E%3C/svg%3E">
 <style>
   html {
     background-color: #000033;
@@ -135,11 +136,74 @@
   .bullet::before { content: "\2726  "; color: #FF00FF; }
   .gbook { text-align: center; margin-top: 10px; }
   .sig { text-align: center; font-size: 11px; margin-top: 14px; }
+  .lastupdated { text-align: center; font-size: 11px; font-family: "Comic Sans MS", cursive; margin-top: 6px; color: #FF0000; }
+  .digit-counter { display: inline-flex; gap: 2px; }
+  .digit-counter span {
+    display: inline-block;
+    background: #000000;
+    color: #00FF00;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: 16px;
+    width: 14px;
+    text-align: center;
+    padding: 3px 2px;
+    border: 2px inset #808080;
+  }
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background-color: #000033;
+    background-image:
+      radial-gradient(1px 1px at 20px 30px, #FFFFFF 100%, transparent 100%),
+      radial-gradient(1px 1px at 90px 60px, #FFFFFF 100%, transparent 100%),
+      radial-gradient(2px 2px at 140px 20px, #FFFF00 100%, transparent 100%),
+      radial-gradient(1px 1px at 45px 90px, #FFFFFF 100%, transparent 100%),
+      radial-gradient(1px 1px at 170px 100px, #00FFFF 100%, transparent 100%),
+      radial-gradient(2px 2px at 110px 140px, #FFFFFF 100%, transparent 100%),
+      radial-gradient(1px 1px at 10px 160px, #FF00FF 100%, transparent 100%);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: "Comic Sans MS", cursive;
+    text-align: center;
+  }
+  #splash h2 {
+    color: #FFFF00;
+    text-shadow: 2px 2px 0 #FF00FF;
+    font-size: 32px;
+    margin-bottom: 4px;
+  }
+  #splash .enter-link {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 22px;
+    background: #C0C0C0;
+    border: 3px outset #FFFFFF;
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  #splash .enter-link:active { border-style: inset; }
+  #splash .loading-text { color: #00FF00; font-size: 14px; }
+  body.splash-active { overflow: hidden; }
 </style>
 </head>
 <body>
 
-<div class="win">
+<div id="splash">
+<h2>&#9889; Aditya Kharmale's Home Page &#9889;</h2>
+<p class="loading-text blink" id="loadingText">L O A D I N G . . .</p>
+<a href="#" class="enter-link" id="enterLink" onclick="enterSite();return false;">&#9654; Click here to Enter Site &#9664;</a>
+<p style="font-size:10px;color:#CCCCCC;margin-top:14px;">(best viewed at 800x600, 256 colors)</p>
+</div>
+
+<div class="win" id="mainContent" style="display:none;">
 
 <h1>&#9733; Aditya Kharmale &#9733;</h1>
 <p class="subtitle">Researcher &amp; Competitive Programmer: Osaka, Japan</p>
@@ -265,7 +329,7 @@ Nov 2021 &ndash; May 2025</p>
 
 <div class="counter-wrap">
 You are visitor number<br>
-<span class="counter" id="counter">000000</span>
+<span class="digit-counter" id="counter"></span>
 </div>
 
 <div class="badges">
@@ -274,6 +338,8 @@ You are visitor number<br>
 <span class="badge">Made with<br>Notepad</span>
 <span class="badge">100% HTML<br>hand&#8209;coded</span>
 <span class="badge">Y2K<br>compliant</span>
+<span class="badge">Netscape<br>Now!</span>
+<span class="badge">&#9733; Cool Site<br>of the Day &#9733;</span>
 </div>
 
 <div class="webring">
@@ -281,6 +347,8 @@ You are visitor number<br>
 </div>
 
 <hr class="rainbow-hr">
+
+<p class="lastupdated blink">Last updated: <span id="lastUpdated">&hellip;</span></p>
 
 <p class="sig">
 &copy; <span id="year"></span> Aditya Kharmale. Stay hungry stay foolish. &middot; <a href="admin.html">admin</a>
@@ -355,8 +423,29 @@ fetch('posts.json?_=' + Date.now())
   var count = parseInt(localStorage.getItem('visitorCount') || '133742', 10);
   count += 1;
   localStorage.setItem('visitorCount', String(count));
-  document.getElementById('counter').textContent = String(count).padStart(6, '0');
+  var digits = String(count).padStart(6, '0').split('');
+  var counterEl = document.getElementById('counter');
+  digits.forEach(function (d) {
+    var span = document.createElement('span');
+    span.textContent = d;
+    counterEl.appendChild(span);
+  });
 })();
+
+document.getElementById('lastUpdated').textContent = document.lastModified;
+
+function enterSite() {
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('mainContent').style.display = '';
+  document.body.className = document.body.className.replace('splash-active', '').trim();
+  sessionStorage.setItem('splashSeen', '1');
+}
+
+if (sessionStorage.getItem('splashSeen')) {
+  enterSite();
+} else {
+  document.body.className = (document.body.className + ' splash-active').trim();
+}
 </script>
 
 </body>
