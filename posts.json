@@ -47,6 +47,12 @@
       "date": "2026-10-18",
       "title": "A small open source contribution to REA",
       "html": "<p>Recently I got one of my contributions merged into <a href=\"https://github.com/morluto/rea\" target=\"_blank\" rel=\"noopener noreferrer\">REA</a>.</p>\n\n<p>The issue was a small Unicode matching bug in the JavaScript feature seed logic. In case-sensitive matching, <code>ff</code> could also match the ligature <code>ﬀ</code> because both values were being normalized with NFKC. I changed the case-sensitive path to use NFC, kept the existing NFKC behavior for case-insensitive matching, and added tests for it.</p>\n\n<p>It is not a huge change, but I liked this one because the bug was hidden in a very small detail. The PR went through review and testing and was merged into the main project on 17 October 2026.</p>\n\n<p>I have mostly built things in my own repositories, so getting a fix accepted into someone else's project felt different. I want to do more of this.</p>\n\n<p>PR: <a href=\"https://github.com/morluto/rea/pull/3803\" target=\"_blank\" rel=\"noopener noreferrer\">morluto/rea#3803</a></p>"
+    },
+    {
+      "id": "2026-10-20-currently-reading-kosla",
+      "date": "2026-10-20",
+      "title": "Currently reading: Kosla",
+      "html": "<p>I am currently reading <b>Kosla</b> by <b>Bhalchandra Nemade</b>.</p><p>It is one of the books I wanted to read in Marathi, and I will probably add a few notes here as I go through it.</p>"
     }
   ]
 }
